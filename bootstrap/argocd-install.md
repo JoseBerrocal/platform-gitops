@@ -115,3 +115,37 @@ and CLI login without port-forward:
 ```bash
 argocd login argocd.local --insecure
 ```
+
+## Troubleshooting
+
+### ArgoCD CLI still connects to localhost:8080
+
+Check:
+
+```bash
+env | grep ARGOCD
+```
+
+If you see:
+
+```text
+ARGOCD_SERVER=localhost:8080
+```
+
+remove it:
+
+```bash
+unset ARGOCD_SERVER
+```
+
+or update it:
+
+```bash
+export ARGOCD_SERVER=argocd.local
+```
+
+Verify:
+
+```bash
+argocd app list
+```
