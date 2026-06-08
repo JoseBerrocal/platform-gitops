@@ -83,3 +83,35 @@ kubectl apply -f apps/ingress-nginx.yaml
 
 kubectl apply -f apps/monitoring.yaml
 ```
+
+## Configure ArgoCD for Local HTTP Ingress
+
+For this local Docker Desktop lab, ArgoCD is exposed through Ingress using HTTP.
+
+Patch ArgoCD to disable HTTPS redirect:
+
+```bash
+kubectl patch configmap argocd-cmd-params-cm \
+-n argocd \
+--type merge \
+-p '{"data":{"server.insecure":"true"}}'
+```
+
+Restart ArgoCD server:
+
+```bash
+kubectl rollout restart deployment argocd-server -n argocd
+kubectl rollout status deployment argocd-server -n argocd
+```
+
+This allows access through:
+
+```text
+http://argocd.local
+```
+
+and CLI login without port-forward:
+
+```bash
+argocd login argocd.local --insecure
+```
